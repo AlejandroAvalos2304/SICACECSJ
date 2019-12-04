@@ -1,0 +1,13 @@
+<?php session_start();
+
+unset($_SESSION["nombreE"]);
+unset($_SESSION["autenticado"]);
+unset($_SESSION["nivelE"]);
+
+session_destroy();
+
+echo "<script languaje='javascript'>";
+        echo "location.href='../login.php';";
+           echo "</script>";
+
+?>
