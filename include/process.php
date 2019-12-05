@@ -1,6 +1,6 @@
 <?php
 
-require_once 'config.php';
+require_once './config.php';
 // conexion de la base de datos
 $conexion = Conexion::singleton_conexion();
 

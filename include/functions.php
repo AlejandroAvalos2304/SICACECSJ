@@ -1,5 +1,4 @@
 <?php
-
 function horariostable($page)
 {
     // conexion de la base de datos
