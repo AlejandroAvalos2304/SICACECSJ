@@ -331,6 +331,9 @@ if ($_SESSION['autenticado'] != "yeah") {
                             <li class="active">
                                 <a href="../docs/horario.php">Registro de Horarios</a>
                             </li>
+                            <li class="active">
+                                <a href="../lista.php">Lista de Horarios</a>
+                            </li>
                         </ul>
                     </li>
                     <a href="javascript:void(0);" class="menu-toggle">
@@ -380,10 +383,10 @@ if ($_SESSION['autenticado'] != "yeah") {
                 <div class="card-header py-3 clearfix">
                     <h6 class="m-0 font-weight-bold text-primary"></h6>
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                    <a type="button" class="btn btn-primary" href="../RegistroHorario.php">
                         <img src="../images/iconos/today.svg" alt="x" />
                         Registrar Horario
-                    </button>
+                    </a>
                     <a type="button" class="btn btn-success" href="../docs/listaHorario.php">
                         <img src="../images/iconos/date_range.svg" alt="x" />Ver Horario</a>
 
@@ -520,170 +523,3 @@ if ($_SESSION['autenticado'] != "yeah") {
         </body>
 </html>
 
-<?php 
-include("../config/conexion.php"); 
-if(isset($_REQUEST["bandera"])){
-
-$bandera=$_REQUEST["bandera"];
-$ban=0;
-
-$idmateria=$_REQUEST["materia"];
-$dias=$_REQUEST["days-chose"];
-
-
-if($dias=="2,1,"){
-	$dias="1,2,";//lunes y martes
-}
-
-if($dias=="3,1,"){
-	$dias="1,3,";	//lunes y miercoles
-}
-
-if($dias=="4,1,"){
-	$dias="1,4,";   //lunes y jueves
-}
-
-if($dias=="5,1,"){
-	$dias="1,5,";   //lunes y viernes
-}
-
-if($dias=="3,2,"){
-	$dias="2,3,";  //martes y miercoles
-}
-
-if($dias=="4,2,"){
-	$dias="2,4,";   // martes y jueves
-}
-
-if($dias=="5,2,"){
-	$dias="2,5,";   //martes y viernes
-}
-
-if($dias=="5,3,"){
-	$dias="3,5,"; // miercoles y viernes
-}
-
-if($dias=="5,4,"){
-	$dias="4,5,";  // jueves y viernes
-}
-
-
-
-if($dias=="4,3,"){
-	$dias="3,4,";  //miercoles y jueves
-	
-}
-
-
-
-$horainicio=$_REQUEST["tim1"];
-$horafin=$_REQUEST["tim2"];
-$nivel=$_REQUEST["nivelE"];
-
-if($bandera=="add"){
-pg_query("BEGIN");	
-
-
-	$query_s2=pg_query($conexion,"select * from horario where dias='$dias' and idmateria='$idmateria' and horai='$horainicio' and horaf='$horafin' and nivel='$nivel' ");
-		$query_s3=pg_query($conexion,"select * from horario where dias='$dias' and idmateria='$idmateria' and horai='$horainicio' and horaf='$horafin' ");
-			$query_s4=pg_query($conexion,"select * from horario where idmateria='$idmateria' and nivel='$nivel' ");
-			
-			
-			
-	$query_s5=pg_query($conexion,"select * from horario where horai='$horainicio' and horaf='$horafin' and idmateria='$idmateria' ");
-		
-						while($fila=pg_fetch_array($query_s5)){
-							$diasc=$fila[1];
-						}
-			
-			     /*lo que se ingresa */  /*en la base */  
-			     /*Lunes y Miercoles-Lunes y Martes*/
-				 
-				 //validando lunes con otro dia
-			if( ($dias=="1,3," && $diasc=="1,2,") || ($dias=="1,4," && $diasc=="1,2,") || ($dias=="1,5," && $diasc=="1,2,") ||  ($dias=="2,3," && $diasc=="1,2,") || ($dias=="2,4," && $diasc=="1,2,") || ($dias=="2,5," && $diasc=="1,2,") ){
-				$ban=1;
-			}
-			
-			if( ($dias=="1,2," && $diasc=="1,3,") || ($dias=="1,4," && $diasc=="1,3,") || ($dias=="1,5," && $diasc=="1,3,") ||  ($dias=="2,3," && $diasc=="1,3,") || ($dias=="3,4," && $diasc=="1,3,") || ($dias=="3,5," && $diasc=="1,3,") ){
-				$ban=1;
-			}
-			if( ($dias=="1,2," && $diasc=="1,4,") || ($dias=="1,3," && $diasc=="1,4,") || ($dias=="1,5," && $diasc=="1,4,") ||  ($dias=="4,5," && $diasc=="1,4,") ||  ($dias=="2,4," && $diasc=="1,4,") ||  ($dias=="3,4," && $diasc=="1,4,") ){
-				$ban=1;
-			}
-			
-			if( ($dias=="1,2," && $diasc=="1,5,") || ($dias=="1,3," && $diasc=="1,5,") || ($dias=="1,4," && $diasc=="1,5,") || ($dias=="2,5," && $diasc=="1,5,") || ($dias=="3,5," && $diasc=="1,5,") || ($dias=="4,5," && $diasc=="1,5,")  ){
-				$ban=1;
-			}
-			
-			
-			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			//validando martes con otro dia
-			if( ($dias=="1,2," && $diasc=="2,3,") || ($dias=="1,3," && $diasc=="2,3,") || ($dias=="3,4," && $diasc=="2,3,") ||  ($dias=="3,5," && $diasc=="2,3,") ||  ($dias=="2,4," && $diasc=="2,3,") ||  ($dias=="2,5," && $diasc=="2,3,") ){
-				$ban=1;
-			}
-			if( ($dias=="1,2," && $diasc=="2,4,") || ($dias=="1,4," && $diasc=="2,4,") || ($dias=="2,3," && $diasc=="2,4,") ||  ($dias=="2,5," && $diasc=="2,4,") ||  ($dias=="4,5," && $diasc=="2,4,") ||  ($dias=="3,4," && $diasc=="2,4,") ){
-				$ban=1;
-			}
-			if( ($dias=="1,2," && $diasc=="2,5,") || ($dias=="2,3," && $diasc=="2,5,") || ($dias=="2,4," && $diasc=="2,5,") ||  ($dias=="1,5," && $diasc=="2,5,") ||  ($dias=="3,5," && $diasc=="2,5,") ||  ($dias=="4,5," && $diasc=="2,5,") ){
-				$ban=1;
-			}
-			
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			//validando miercoles con otro dia
-			if( ($dias=="1,3," && $diasc=="3,4,") || ($dias=="2,3," && $diasc=="3,4,") || ($dias=="3,5," && $diasc=="3,4,") ||  ($dias=="1,4," && $diasc=="3,4,") ||  ($dias=="2,4," && $diasc=="3,4,") ||  ($dias=="4,5," && $diasc=="3,4,") ){
-				$ban=1;
-			}
-			if( ($dias=="1,3," && $diasc=="3,5,") || ($dias=="2,3," && $diasc=="3,5,") || ($dias=="3,4," && $diasc=="3,5,") ||  ($dias=="1,5," && $diasc=="3,5,") ||  ($dias=="2,5," && $diasc=="3,5,") ||  ($dias=="4,5," && $diasc=="3,5,") ){
-				$ban=1;
-			}
-			
-			
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			//validando jueves con otro dia
-			if( ($dias=="1,4," && $diasc=="4,5,") || ($dias=="2,4," && $diasc=="4,5,") || ($dias=="3,4," && $diasc=="4,5,") ||  ($dias=="1,5," && $diasc=="4,5,") ||  ($dias=="2,5," && $diasc=="4,5,") ||  ($dias=="3,5," && $diasc=="4,5,") ){
-				$ban=1;
-			}
-			
-			
-			//	$query_s5=pg_query($conexion,"select * from zzhorario where horai='$horainicio' and horaf='$horafin' and dias='$dias' ");
-	$rows = pg_num_rows($query_s2);
-	$rows2= pg_num_rows($query_s3);
-	$rows3= pg_num_rows($query_s4);
-	//$rows4= pg_num_rows($query_s5);
-		if($rows==0 && $rows2==0 && $rows3==0 && $ban==0 ){
-	
-
-	$result=pg_query($conexion,"insert into horario(dias,idmateria,horai,horaf,nivel) values('$dias','$idmateria','$horainicio','$horafin','$nivel' )" );
-if(!$result){
-				pg_query("rollback");
-			
-				echo "<script language='javascript'>";
-					echo "alertaErrorIngreso();";
-	echo "setTimeout ('r()', 1500);";
-	echo "</script>";
-				}else{
-					pg_query("commit");
-					echo "<script language='javascript'>";
-				echo "alertaExito();";
-		
-				echo "</script>";
-		
-echo "<script language='javascript'>";
-	echo "setTimeout ('r()', 1500);";
-	echo "</script>";
-					}
-}else{
-	
-		echo "<script language='javascript'>";
-				echo "alertaErrorRegistro();";
-				echo "</script>";
-	
-	
-}/////////////////////
-
-
-}
-
-
-}
-?>

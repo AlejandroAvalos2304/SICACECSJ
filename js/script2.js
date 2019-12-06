@@ -173,8 +173,10 @@ if (dado == true){
                     var btnsave = $(this);
                     var descripcion = $('#descripcioninput').val();
                     var nombre = $('#nombreinput').val();
+                    var grado=$('#gradoinput').val();
+                    var seccion=$('#seccioninput').val();
                     var horario = $('#mynew').html();
-                    var horariodata = 'process=2&nombre='+nombre+'&descripcion='+descripcion+'&horario='+horario;
+                    var horariodata = 'process=2&nombre='+nombre+'&grado='+grado+'&seccion='+seccion+'&descripcion='+descripcion+'&horario='+horario;
 
                     $.ajax({
 

@@ -1,9 +1,4 @@
-﻿<?php 
-//para que te funcione la tabla si la quitas te jodistes
-include 'include/config.php';
-require_once 'include/functions.php';
-//
-session_start();
+﻿<?php session_start();
 if ($_SESSION['autenticado'] != "yeah") {
     header("Location: ../login.php");
     exit();
@@ -101,7 +96,7 @@ if ($_SESSION['autenticado'] != "yeah") {
 
 <script src="js/moment-with-locales.js"></script>
 <script src="js/bootstrap-datetimepicker.js"></script> 
-		
+        
     <!-- validate -->
     <script src="js/jquery.validate.min.js"></script>
     <script src="js/additional-methods.min.js"></script>
@@ -336,9 +331,6 @@ if ($_SESSION['autenticado'] != "yeah") {
                             <li class="active">
                                 <a href="docs/horario.php">Registro de Horarios</a>
                             </li>
-                            <li class="active">
-                                <a href="lista.php">Lista de Horarios</a>
-                            </li>
                         </ul>
                     </li>
                     <a href="javascript:void(0);" class="menu-toggle">
@@ -380,37 +372,111 @@ if ($_SESSION['autenticado'] != "yeah") {
         <div class="container-fluid">
             <div class="row">
                 <div class="row mb-12">  
-          <!-- menu -->
+                    <div id="menu" class="col-md-3"></div>
+             <!-- menu -->
     <div id="menu" class="col-md-6">
       <div class="container">
-          <a class="btn btn-warning" href="RegistroHorario.php"><i class="fa fa-calendar-check-o"></i> Nuevo Horario</a>
+          <a class="btn btn-primary" href="lista.php"><i class="fa fa-calendar" aria-hidden="true"></i> Lista de Horarios</a>
+          <button class="btn btn-warning" data-toggle="modal" data-target="#myModal"><i class="fa fa-calendar-check-o"></i> Nuevo Horario</button>
+          <a class="btn btn-danger" href="index.php"><i class="fa fa-calendar" aria-hidden="true"></i>Atras</a>
       </div>
     </div>
     <!-- menu -->
 
-<div  class="col-md-12">
+
     <!-- container -->
-      
-         <div class="panel panel-info" style="margin-top: 10px;">
-           <div class="panel-heading"><i class="fa fa-calendar" aria-hidden="true"></i> Lista de Horarios</div>
-           <div class="panel-body nopadding">
-                <?php
-                    if (isset($_GET['page'])) {
-                        horariostable($_GET['page']);
-                    } else {
-                        horariostable(1);
-                    }
-                ?>
-           </div>
-         </div>
-     
+      <div class="container">
+       <div id="clockindex" class="col-sm-12 text-center">
+         <i class="fa fa-calendar-plus-o icon-clock-index animated infinite pulse" aria-hidden="true"></i>
+       </div>
+       <div id="mynew" class="col-sm-12">
+          
+       </div>
+      </div>
     <!-- container -->
 
-    <!-- apend data -->
-    <div id="appenddata"></div>
-    <!-- apend data -->
 
 
+<!-- modal nuevo horario -->
+<div class="modal fade animated bounceInLeft" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close cancel-new" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="fa fa-times"></i></span></button>
+        <h4 class="modal-title" id="myModalLabel"><i class="fa fa-calendar"></i> Nuevo Horario</h4>
+      </div>
+      <div class="modal-body">
+        
+         <form id="horariofrm">
+            <label>Materia</label>
+            <select class="form-control" name="nombre" style="width: 100%; height:36px;">
+                <option>Seleccionar</option>
+                <option value="Lenguaje">Lenguaje</option>
+                <option value="Matematicas">Matematicas</option>
+                <option value="Ciencia">Ciencia</option>
+                <option value="Sociales">Sociales</option>
+                <option value="Ingles">Ingles</option>
+                <option value="Fisica">Fisica</option>
+               
+            </select>  
+             <label>Grado</label>
+            <select class="form-control" name="grado" style="width: 100%; height:36px;">
+                <option>Seleccionar</option>
+                <option value="Primero">Primero</option>
+                <option value="Segundo">Segundo</option>
+                <option value="Tercero">Tercero</option>
+                <option value="Cuarto">Cuarto</option>
+                <option value="Quinto">Quinto</option>
+                <option value="Sexto">Sexto</option>
+                <option value="Septimo">Septimo</option>
+                <option value="Octavo">Octvavo</option>
+                <option value="Noveno">Noveno</option>
+            </select>  
+             <label>Sección</label>
+            <select class="form-control" name="seccion" style="width: 100%; height:36px;">
+                <option>Seleccionar</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                
+            </select>  
+            <label>Descripción:</label>
+            <textarea class="form-control" name="descripcion" rows="3"></textarea>
+            <label>Dias:</label>
+            <div id="days-list" class="col-sm-12">
+               <a data-day="1" class="day-option">Lunes</a>
+               <a data-day="2" class="day-option">Martes</a>
+               <a data-day="3" class="day-option">Miercoles</a>
+               <a data-day="4" class="day-option">Jueves</a>
+               <a data-day="5" class="day-option">Viernes</a>
+               <a data-day="6" class="day-option">Sabado</a>
+               <a data-day="7" class="day-option">Domingo</a>
+            </div>
+            <input id="days-chose" class="form-control" type="text" name="days" >
+            <label>Inicio:</label>
+            <input class="form-control" type="text" id="time1" name="tiempo1">
+            <label>Final:</label>
+            <input class="form-control" type="text" id="time2" name="tiempo2">
+            <label>Dividir Entre:</label>
+            <select class="form-control" name="minutos">
+                <option></option>
+                <option value="35">35 Minutos</option>
+                <option value="45">45 minutos</option>
+                <option value="60">1 Hora</option>
+            </select>
+         </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="create-horario btn btn-success"><i class="fa fa-calendar-check-o"></i> Crear</button>
+        <button type="button" class="cancel-new btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal nuevo horario -->
+
+    
 <!-- append modal set data -->
 <div class="modal fade" id="DataEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
@@ -443,9 +509,8 @@ if ($_SESSION['autenticado'] != "yeah") {
     </div>
   </div>
 </div>
-</div>
 <!-- append modal set data -->
-                </div><!--div row de 12-->
+                </div>
             
       </div>      
         </div>
@@ -455,11 +520,11 @@ if ($_SESSION['autenticado'] != "yeah") {
 
     
 
-<!-- append modal set data -->
 
-    <!-- alert danger -->
-    <div id="alert-error"><i class="fa fa-times fa-2x"></i></div>
-    <!-- alert danger -->
+
+<!-- alert danger -->
+<div id="alert-error"><i class="fa fa-times fa-2x"></i></div>
+<!-- alert danger -->
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -472,8 +537,9 @@ if ($_SESSION['autenticado'] != "yeah") {
     <!-- validate -->
     <script src="js/jquery.validate.min.js"></script>
     <script src="js/additional-methods.min.js"></script>
+     <script src="js/script.js"></script>
     <!-- script -->
-    <script src="js/scripts-custom.js"></script>    
+    
         </body>
 </html>
 

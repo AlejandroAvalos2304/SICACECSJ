@@ -1,14 +1,15 @@
+
 <?php
 
 require_once './config.php';
 // conexion de la base de datos
 $conexion = Conexion::singleton_conexion();
-
 if (isset($_POST['process'])) {
     //---------------------------------------------------------------------------------------------------
 
     // Var Process
     $process = $_POST['process'];
+    
 
     if ($process == 1) {
         //---------------------------------------------------------------------------------------------------
@@ -18,11 +19,14 @@ if (isset($_POST['process'])) {
         // Contar dias
         $countdays = count($dias);
 
-        $name = strip_tags($_POST['nombre']);
+        $materia = strip_tags($_POST['nombre']);
+        $grado = strip_tags($_POST['grado']);
+        $seccion = strip_tags($_POST['seccion']);
+        
 
         // Acomodar Dias
         echo'
-<h1 class="horario-name"><i class="fa fa-calendar" aria-hidden="true"></i> '.$name.'</h1>
+<h3 class="horario-name" style="color:red;"><i class="fa fa-calendar" aria-hidden="true"></i>'.$grado.' Sección: '.$seccion.' '.$materia.'</h3>
 <table id="thetable" class="table table-bordered">
 <thead class="thead">
 <th class="horarioheader"><i class="fa fa-clock-o"></i> Horario</th>
@@ -142,9 +146,11 @@ if (isset($_POST['process'])) {
         sumtime($inicio24, $final24, $_POST['minutos'], $countdays);
         ///////////////////////////////////////////////////////
         echo '</tbody></table>
-
 <input type="hidden" id="descripcioninput" value="'.$_POST['descripcion'].'">
 <input type="hidden" id="nombreinput" value="'.$_POST['nombre'].'">
+ <input type="hidden" id="gradoinput" value="'.$_POST['grado'].'">
+ <input type="hidden" id="seccioninput" value="'.$_POST['seccion'].'">
+
 
 <button class="guardarhorario btn btn-lg btn-warning pull-right"><i class="fa fa-floppy-o"></i> Guardar</button>
 
@@ -163,15 +169,19 @@ if (isset($_POST['process'])) {
 
         $fecha = date('Y-m-d');
         $data = $_POST['horario'];
-        $nombre = $_POST['nombre'];
+        $materia = $_POST['nombre'];
+        $grado = $_POST['grado'];
+        $seccion = $_POST['seccion'];
         $descripcion = $_POST['descripcion'];
 
-        $SQL = 'INSERT INTO horarios (nombre, descripcion, horario, fecha) VALUES (:nombre, :descripcion, :horario, :fecha);';
+        $SQL = 'INSERT INTO horarios (nombre,grado,seccion,descripcion, horario, fecha) VALUES (:nombre,:grado,:seccion,:descripcion, :horario,:fecha);';
         $sentence = $conexion->prepare($SQL);
-        $sentence->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+        $sentence->bindParam(':nombre', $materia, PDO::PARAM_STR);
+        $sentence->bindParam(':grado', $grado, PDO::PARAM_STR); 
+        $sentence->bindParam(':seccion', $seccion, PDO::PARAM_STR); 
         $sentence->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
         $sentence->bindParam(':horario', $data, PDO::PARAM_STR);
-        $sentence->bindParam(':fecha', $fecha, PDO::PARAM_STR);
+        $sentence->bindParam(':fecha', $fecha, PDO::PARAM_STR);     
         $sentence->execute();
 
     //--------------------------------------------------------------------------------------------------
@@ -203,21 +213,25 @@ if (isset($_POST['process'])) {
     }
     //--------------------------------------------------------------------------------------------------
     elseif ($process == 4) {
-        if (empty($_POST['nombre']) || empty($_POST['horario']) || empty($_POST['descripcion']) || empty($_POST['id'])) {
+        if (empty($_POST['materia']) || empty($_POST['horario']) || empty($_POST['descripcion']) || empty($_POST['id'])) {
             exit();
         }
-        if (ctype_space($_POST['nombre']) || ctype_space($_POST['horario']) || ctype_space($_POST['descripcion']) || ctype_space($_POST['id'])) {
+        if (ctype_space($_POST['materia']) || ctype_space($_POST['horario']) || ctype_space($_POST['descripcion']) || ctype_space($_POST['id'])) {
             exit();
         }
 
         $data = $_POST['horario'];
-        $nombre = $_POST['nombre'];
+       $materia = $_POST['materia'];
+        $grado = $_POST['grado'];
+        $secion = $_POST['seccion'];
         $descripcion = $_POST['descripcion'];
         $iddata = $_POST['id'];
 
-        $SQL = 'UPDATE horarios SET nombre =:nombre, descripcion = :descripcion, horario = :horario WHERE id = :id';
+        $SQL = 'UPDATE horarios SET nombre =:nombre,seccion=:seccion,grado=:grado,descripcion = :descripcion, horario = :horario WHERE id = :id';
         $sentence = $conexion->prepare($SQL);
-        $sentence->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+        $sentence->bindParam(':nombre', $materia, PDO::PARAM_STR);
+        $sentence->bindParam(':seccion', $secion, PDO::PARAM_STR);
+        $sentence->bindParam(':grado', $grado, PDO::PARAM_STR);
         $sentence->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
         $sentence->bindParam(':horario', $data, PDO::PARAM_STR);
         $sentence->bindParam(':id', $iddata, PDO::PARAM_INT);

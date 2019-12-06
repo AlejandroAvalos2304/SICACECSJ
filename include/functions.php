@@ -31,10 +31,13 @@ function horariostable($page)
         // code...
     } else {
         echo'
+            <div id="menu" class="col-md-10">
                    <table class="table table-striped">
                       <thead class="messages-table-header">
                          <tr>
-                           <th><i class="fa fa-angle-double-right"></i> Nombre</th>
+                           <th><i class="fa fa-angle-double-right"></i>Materia</th>
+                            <th><i class="fa fa-angle-double-right"></i>Grado</th>
+                             <th><i class="fa fa-angle-double-right"></i>Sección</th>
                            <th><i class="fa fa-angle-double-right"></i> Descripción</th>
                            <th><i class="fa fa-angle-double-right"></i> Fecha</th>
                            <th><i class="fa fa-angle-double-right"></i> Acciones</th>
@@ -49,6 +52,8 @@ function horariostable($page)
             echo '
               <tr id="trhorario'.$key['id'].'">
                 <td>'.$key['nombre'].'</td>
+                <td>'.$key['grado'].'</td>
+                <td>'.$key['seccion'].'</td>
                 <td>'.$key['descripcion'].'</td>
                 <td>'.$fecha.'</td>
                 <td>
@@ -57,7 +62,7 @@ function horariostable($page)
                   <button data-id="'.$key['id'].'" class="delhorario btn btn-sm btn-danger"><i class="fa fa-times"></i> Eliminar</button>
                 </td>
               </tr>
-            ';
+            </div>';
         }
 
         echo'
